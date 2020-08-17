@@ -9,6 +9,7 @@ const NEWS_APIKEY = process.env.NEWS_APIKEY;
 const fetchArticlesPeriodically = () => {
   schedule.scheduleJob("0 * * * *", function () {
     console.log("A new hour has reached");
+    fetchArticles();
   });
 };
 const fetchArticles = async () => {
