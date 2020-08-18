@@ -28,9 +28,10 @@ const fetchArticles = async () => {
         const source = article.source.name;
         // create a new article if the current article is not found
         // in the database
-        Article.findOne({ url }).then((article) => {
+        Article.findOne({ url: url }).then((article) => {
           // if article is not found
           if (!article) {
+            console.log(url);
             Article.create({
               source,
               author,
@@ -56,4 +57,5 @@ router.get("/", (req, res) => {
 });
 
 fetchArticlesPeriodically();
+// fetchArticles();
 module.exports = router;

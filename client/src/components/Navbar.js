@@ -38,7 +38,7 @@ export class Navbar extends Component {
     );
     return (
       <div>
-        <nav className="nav-extended blue">
+        <nav className="nav-extended blue-grey lighten-1">
           <div className="nav-wrapper container">
             <a className="brand-logo">Logo</a>
             <a data-target="mobile-demo" className="sidenav-trigger">

@@ -1,0 +1,8 @@
+@media all and (min-width: 601px) {
+  #fox-list {
+    padding-right: 1.5rem;
+  }
+  #cnn-list {
+    padding-left: 1.5rem;
+  }
+}
