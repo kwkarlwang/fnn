@@ -16,3 +16,13 @@
   opacity: 0;
   transition: visibility 0s 0.3s, opacity 0.3s linear;
 }
+.logo {
+  height: 54px;
+  margin: 5px;
+  border-radius: 20%;
+}
+@media (max-width: 600px) {
+  .logo {
+    height: 46px;
+  }
+}
