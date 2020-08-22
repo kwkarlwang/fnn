@@ -10,52 +10,112 @@ export class Navbar extends Component {
       searchText: "",
       showSearch: false,
     };
+    this.searchInput = React.createRef();
   }
   componentDidMount() {
-    M.AutoInit();
+    // M.AutoInit();
+  }
+  componentDidUpdate() {
+    this.searchInput.current.focus();
   }
   toggleSearch = (e) => {
     e.preventDefault();
     this.setState({ showSearch: !this.state.showSearch });
   };
   render() {
-    let searchbarClass = "container hidden";
+    let searchbarClass = "hidden";
     if (this.state.showSearch) {
-      searchbarClass = "container visible";
+      searchbarClass = "visible";
     }
 
     let SearchBar = (
-      <div className={searchbarClass}>
-        <form id="searchbar">
-          <div className="input-field">
-            <i className="material-icons prefix">search</i>
-            <input
-              type="text"
-              placeholder="Search for topics from CNN and Fox news"
-            />
-          </div>
-        </form>
-      </div>
+      // <div className={searchbarClass}>
+      //   <form id="searchbar">
+      //     <div className="input-field">
+      //       <i className="material-icons prefix">search</i>
+      //       <input
+      //         type="text"
+      //         placeholder="Search for topics from CNN and Fox news"
+      //       />
+      //     </div>
+      //   </form>
+      // </div>
+      <nav
+        id="searchbar"
+        className={"container blue lighten-5 center " + searchbarClass}
+      >
+        <div className="nav-wrapper">
+          <form>
+            <div className="input-field">
+              <input ref={this.searchInput} type="search" required />
+              <label className="label-icon" htmlFor="search">
+                <i className="material-icons">search</i>
+              </label>
+              <i className="material-icons">close</i>
+            </div>
+          </form>
+        </div>
+      </nav>
     );
     return (
       <div>
-        <nav className="nav-extended blue-grey darken-1">
-          <div className="nav-wrapper container">
+        <ul id="dropdown" className="dropdown-content">
+          <li>
+            <a href="/articles/date">View by date</a>
+          </li>
+          <li>
+            <a href="/articles/all">View all articles</a>
+          </li>
+        </ul>
+        <nav className="blue lighten-2">
+          <div className="container nav-wrapper blue lighten-2">
             <a href="/" className="brand-logo">
               <img src={FNN_logo} alt="logo" className="logo" />
             </a>
-            <a data-target="mobile-demo" className="sidenav-trigger">
+            <a data-target="nav-mobile" className="sidenav-trigger">
               <i className="material-icons">menu</i>
             </a>
-            <ul id="nav-mobile" className="right hide-on-med-and-down">
-              <li>
-                <a href="/articles">View All Articles</a>
+            <ul className="right hide-on-med-and-down">
+              <li className="valign-wrapper">
+                <a className="dropdown-trigger" data-target="dropdown">
+                  <span>
+                    News
+                    <i
+                      style={{ marginLeft: "1px" }}
+                      className="material-icons right"
+                    >
+                      arrow_drop_down
+                    </i>
+                  </span>
+                </a>
               </li>
               <li>
                 <a href="/about">About</a>
               </li>
               <li>
-                <a href="#" onClick={this.toggleSearch}>
+                <a onClick={this.toggleSearch}>Search</a>
+              </li>
+            </ul>
+            <ul id="nav-mobile" className="sidenav">
+              <li className="valign-wrapper">
+                {/* <a className="dropdown-trigger" data-target="dropdown"> */}
+                <a className="" data-target="">
+                  <span>
+                    News
+                    <i
+                      style={{ marginLeft: "1px" }}
+                      className="material-icons right"
+                    >
+                      arrow_drop_down
+                    </i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="/about">About</a>
+              </li>
+              <li>
+                <a className="sidenav-close" onClick={this.toggleSearch}>
                   Search
                 </a>
               </li>

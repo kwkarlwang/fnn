@@ -55,6 +55,11 @@ router.get("/", (req, res) => {
     .sort({ publishedAt: -1 })
     .then((articles) => res.json(articles));
 });
+router.get("/less", (req, res) => {
+  Article.find()
+    .sort({ publishedAt: -1 })
+    .then((articles) => res.json(articles.slice(0, 10)));
+});
 
 fetchArticlesPeriodically();
 // fetchArticles();

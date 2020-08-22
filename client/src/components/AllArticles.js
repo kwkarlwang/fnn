@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import M from "materialize-css";
-import "./Articles.css";
+import "./AllArticles.css";
 import cnn_logo from "../assets/cnn.png";
 import fox_logo from "../assets/fox_news.png";
 
-export class Articles extends Component {
+export class AllArticles extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,6 +53,7 @@ export class Articles extends Component {
         top: 80,
       });
       await this.fetchData();
+      M.AutoInit();
       elems = document.querySelectorAll(".collapsible");
       this.state.collapsibles = M.Collapsible.init(elems, {
         accordion: false,
@@ -87,7 +88,7 @@ export class Articles extends Component {
   };
   createCards = (articles, key) => {
     return (
-      <ul key={key} className="collapsible">
+      <ul key={key} className="collapsible no-autoinit">
         {articles.map((article) => {
           if (!article.visible) return;
           const logo = article.source === "CNN" ? cnn_logo : fox_logo;
@@ -116,7 +117,15 @@ export class Articles extends Component {
               <div className="collapsible-body">
                 <div className="row">
                   <div className="col s12 m9">
-                    <span>{article.description}</span>
+                    <a
+                      style={{ color: "black" }}
+                      className="tooltipped"
+                      data-position="bottom"
+                      data-tooltip="Click to read more"
+                      href={article.url}
+                    >
+                      {article.description}
+                    </a>
                   </div>
                   <div className="col s12 m3">
                     <img
@@ -150,8 +159,8 @@ export class Articles extends Component {
     }
     return (
       <div className="row">
-        <div className="col s12 m2">
-          <div className="pushpin">
+        <div className="col m12 l2 hide-on-med-and-down">
+          <div className="pushpin no-autoinit">
             <blockquote>
               <a
                 className="waves-red waves-effect btn-flat"
@@ -187,10 +196,10 @@ export class Articles extends Component {
             </blockquote>
           </div>
         </div>
-        <div className="col s12 m8">{datesWithArticles}</div>
+        <div className="col m12 l8">{datesWithArticles}</div>
       </div>
     );
   }
 }
 
-export default Articles;
+export default AllArticles;
