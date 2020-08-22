@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const MONGOURI = process.env.MONGOURI;
 const mongoose = require("mongoose");
+const path = require("path")
 
 // Bodyparser Middleware
 app.use(express.json());
