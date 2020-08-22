@@ -13,7 +13,7 @@ export class Navbar extends Component {
     this.searchInput = React.createRef();
   }
   componentDidMount() {
-    // M.AutoInit();
+    M.AutoInit();
   }
   componentDidUpdate() {
     this.searchInput.current.focus();

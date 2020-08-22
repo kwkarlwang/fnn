@@ -9,16 +9,14 @@ export class Home extends Component {
     };
   }
   componentDidMount = () => {
-    // M.AutoInit();
     try {
       document.addEventListener("DOMContentLoaded", async () => {
         const res = await axios.get("/api/articles/less");
         this.setState({
           articles: res.data,
         });
-        var elems = document.querySelectorAll(".carousel");
-        console.log(elems);
-        var instances = M.Carousel.init(elems, {});
+        const elems = document.querySelectorAll(".carousel");
+        M.Carousel.init(elems, {});
       });
     } catch (err) {
       console.log(err);
@@ -49,10 +47,9 @@ export class Home extends Component {
     const articles = this.state.articles.map((article) => {
       return this.createCard(article);
     });
-    console.log(articles);
     return (
       <div className="container">
-        <div className="carousel">{articles}</div>
+        <div className="carousel no-autoinit">{articles}</div>
         <div className="row">
           <div className="col s6 center">
             <a href="/articles/date" className="btn center yellow darken-2">

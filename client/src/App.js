@@ -13,8 +13,16 @@ function App() {
       <Route exact path="/" component={Home}></Route>
       <Route exact path="/articles/date" component={DateArticles} />
       <Route exact path="/articles/all" component={AllArticles} />
+      <Route exact path="/:other" component={NotFound}></Route>
     </Router>
   );
 }
-
 export default App;
+
+function NotFound() {
+  return (
+    <div className="container">
+      <h1>This page has not been implemented yet : )</h1>
+    </div>
+  );
+}
