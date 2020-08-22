@@ -29,17 +29,6 @@ export class Navbar extends Component {
     }
 
     let SearchBar = (
-      // <div className={searchbarClass}>
-      //   <form id="searchbar">
-      //     <div className="input-field">
-      //       <i className="material-icons prefix">search</i>
-      //       <input
-      //         type="text"
-      //         placeholder="Search for topics from CNN and Fox news"
-      //       />
-      //     </div>
-      //   </form>
-      // </div>
       <nav
         id="searchbar"
         className={"container blue lighten-5 center " + searchbarClass}
@@ -96,20 +85,13 @@ export class Navbar extends Component {
                 <a onClick={this.toggleSearch}>Search</a>
               </li>
             </ul>
+            {/* for mobile */}
             <ul id="nav-mobile" className="sidenav">
-              <li className="valign-wrapper">
-                {/* <a className="dropdown-trigger" data-target="dropdown"> */}
-                <a className="" data-target="">
-                  <span>
-                    News
-                    <i
-                      style={{ marginLeft: "1px" }}
-                      className="material-icons right"
-                    >
-                      arrow_drop_down
-                    </i>
-                  </span>
-                </a>
+              <li>
+                <a href="/articles/all">All News</a>
+              </li>
+              <li>
+                <a href="/articles/date">News by date</a>
               </li>
               <li>
                 <a href="/about">About</a>
