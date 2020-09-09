@@ -102,6 +102,6 @@ router.get("/date", (req, res) => {
     .sort({ publishedAt: -1 })
     .then((articles) => res.json(articles));
 });
-// fetchArticlesPeriodically();
+fetchArticlesPeriodically();
 // fetchArticles();
 module.exports = router;

@@ -25,8 +25,8 @@ export class Home extends Component {
     const titleColor = article.source === "Fox News" ? "blue-text" : "red-text";
     return (
       <div
-        style={{ width: "20rem" }}
         key={article._id}
+        style={{ width: "20rem" }}
         className="carousel-item"
       >
         <div className="card">
@@ -50,7 +50,7 @@ export class Home extends Component {
       <div className="container">
         <div className="row">
           <div className="center-align">
-            <div style={{ height: "5rem" }}></div>
+            <div style={{ height: "2.5rem" }}></div>
             <img className="home-logo" src={FNN_logo} alt="logo" />
             <div style={{ height: "2.5rem" }}></div>
             <h5 className="header light">
@@ -60,7 +60,12 @@ export class Home extends Component {
             </h5>
           </div>
         </div>
-        <div className="carousel no-autoinit">{articles}</div>
+        <div
+          style={{ height: "23rem" }}
+          className="carousel carousel no-autoinit"
+        >
+          {articles}
+        </div>
         <div className="row">
           <div style={{ height: "3.5rem" }}></div>
           <div className="col s12 m2"></div>
