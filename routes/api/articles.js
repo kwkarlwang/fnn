@@ -31,7 +31,6 @@ const fetchArticles = async () => {
         Article.findOne({ url: url }).then((article) => {
           // if article is not found
           if (!article) {
-            console.log(url);
             Article.create({
               source,
               author,
@@ -58,9 +57,51 @@ router.get("/", (req, res) => {
 router.get("/less", (req, res) => {
   Article.find()
     .sort({ publishedAt: -1 })
-    .then((articles) => res.json(articles.slice(0, 10)));
+    .limit(10)
+    .then((articles) => res.json(articles));
+});
+router.get("/count", (req, res) => {
+  Article.countDocuments()
+    .exec()
+    .then((number) => res.json(number));
+});
+router.get("/page", (req, res) => {
+  let { page, limit } = req.query;
+  limit = parseInt(limit);
+  page = parseInt(page);
+  const startIndex = (page - 1) * limit;
+  Article.find()
+    .sort({ publishedAt: -1 })
+    .limit(limit)
+    .skip(startIndex)
+    .then((articles) => res.json(articles));
+});
+router.get("/date/min", (req, res) => {
+  Article.find()
+    .sort({ publishedAt: 1 })
+    .limit(1)
+    .then((article) => {
+      res.json({ minDate: article[0].publishedAt });
+    });
 });
 
-fetchArticlesPeriodically();
+router.get("/date", (req, res) => {
+  // get the beginning of the date
+  const startDate = new Date(req.query.date);
+  startDate.setHours(0, 0, 0, 0);
+  // get the beginning of the next date
+  const endDate = new Date(req.query.date);
+  endDate.setDate(startDate.getDate() + 1);
+  endDate.setHours(0, 0, 0, 0);
+  Article.find({
+    publishedAt: {
+      $gte: startDate,
+      $lt: endDate,
+    },
+  })
+    .sort({ publishedAt: -1 })
+    .then((articles) => res.json(articles));
+});
+// fetchArticlesPeriodically();
 // fetchArticles();
 module.exports = router;

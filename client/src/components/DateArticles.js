@@ -10,63 +10,35 @@ export class DateArticles extends Component {
       dateInstance: {
         date: new Date(),
       },
-      articles: [],
       error: false,
-      dateArticles: [],
+      articles: [],
     };
   }
   handleDateChange = () => {
     try {
-      const startDate = this.state.dateInstance.date;
-      startDate.setHours(0, 0, 0, 0);
-      const endDate = new Date();
-      endDate.setDate(startDate.getDate() + 1);
-      endDate.setHours(0, 0, 0, 0);
-      const dateArticles = this.state.articles.filter(
-        (article) =>
-          startDate <= article.publishedAt && article.publishedAt < endDate
-      );
-      this.setState({
-        ...this.state,
-        dateArticles,
+      const { date } = this.state.dateInstance || new Date();
+      console.log(date);
+      const params = { date };
+      axios.get("/api/articles/date/", { params }).then((res) => {
+        const articles = res.data;
+        this.setState({
+          articles,
+        });
       });
     } catch (error) {
       this.setState({ error: true });
     }
   };
-  findMinDate = () => {
-    const { articles } = this.state;
-    console.log(articles);
-    let minDate = new Date();
-    for (const article of articles) {
-      const { publishedAt } = article;
-      if (publishedAt < minDate) {
-        minDate = publishedAt;
-      }
-    }
-    return minDate;
-  };
-  fetchData = async () => {
-    try {
-      const res = await axios.get("/api/articles");
-      for (const article of res.data) {
-        article.publishedAt = new Date(article.publishedAt);
-      }
-      this.state.articles = res.data;
-      return true;
-    } catch {
-      this.setState({
-        ...this.state,
-        error: true,
-      });
-      return false;
-    }
+  findMinDate = async () => {
+    const res = await axios.get("/api/articles/date/min");
+    const { minDate } = res.data;
+    return new Date(minDate);
   };
   componentDidMount() {
     try {
       document.addEventListener("DOMContentLoaded", async () => {
-        await this.fetchData();
-        const minDate = this.findMinDate();
+        this.handleDateChange();
+        const minDate = await this.findMinDate();
         const maxDate = new Date();
         const elems = document.querySelector(".datepicker");
         const options = {
@@ -78,7 +50,6 @@ export class DateArticles extends Component {
           maxDate,
         };
         this.state.dateInstance = M.Datepicker.init(elems, options);
-        this.handleDateChange();
       });
     } catch (e) {
       this.setState({
@@ -102,7 +73,7 @@ export class DateArticles extends Component {
             <br />
             <p>
               <span style={{ fontStyle: "italic" }} className="grey-text">
-                {article.publishedAt.toLocaleString()}
+                {new Date(article.publishedAt).toLocaleString()}
               </span>
               <span className="badge">
                 <a href={article.url} className="amber-text text-darken-2">
@@ -125,11 +96,11 @@ export class DateArticles extends Component {
         </div>
       );
     }
-    let articles_CNN = this.state.dateArticles.filter(
+    let articles_CNN = this.state.articles.filter(
       (article) => article.source === "CNN"
     );
     articles_CNN = articles_CNN.map((article) => this.createCard(article));
-    let articles_Fox = this.state.dateArticles.filter(
+    let articles_Fox = this.state.articles.filter(
       (article) => article.source === "Fox News"
     );
     articles_Fox = articles_Fox.map((article) => this.createCard(article));

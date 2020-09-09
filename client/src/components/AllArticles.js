@@ -4,23 +4,32 @@ import M from "materialize-css";
 import "./AllArticles.css";
 import cnn_logo from "../assets/cnn.png";
 import fox_logo from "../assets/fox_news.png";
+import Pagination from "./Pagination";
+import queryString from "query-string";
 
 export class AllArticles extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: false,
-      articles: [],
-      dates: {},
-      collapsibles: [],
-      isExpand: false,
-    };
-  }
+  state = {
+    error: false,
+    articles: [],
+    dates: {},
+    collapsibles: [],
+    limit: 30,
+    isExpand: false,
+  };
+  getCurrentPage = () => {
+    const query = queryString.parse(this.props.location.search);
+    const page = parseInt(query.page) || 1;
+    return page;
+  };
 
-  fetchData = async () => {
+  fetchData = async (page, limit) => {
     try {
       const dates = {};
-      const res = await axios.get("/api/articles");
+      const params = {
+        page,
+        limit,
+      };
+      const res = await axios.get("/api/articles/page", { params });
       for (const article of res.data) {
         article.publishedAt = new Date(article.publishedAt);
         article.visible = true;
@@ -31,20 +40,40 @@ export class AllArticles extends Component {
           dates[key] = [article];
         }
       }
-
       this.setState({
-        ...this.state,
         dates,
-        datesCopy: dates,
       });
-      return true;
     } catch {
       this.setState({
-        ...this.state,
         error: true,
       });
-      return false;
     }
+    // try {
+    //   const dates = {};
+    //   const res = await axios.get("/api/articles");
+    // for (const article of res.data) {
+    //   article.publishedAt = new Date(article.publishedAt);
+    //   article.visible = true;
+    //   let key = article.publishedAt.toLocaleDateString();
+    //   if (key in dates) {
+    //     dates[key].push(article);
+    //   } else {
+    //     dates[key] = [article];
+    //   }
+    // }
+    //   this.setState({
+    //     ...this.state,
+    //     dates,
+    //     datesCopy: dates,
+    //   });
+    //   return true;
+    // } catch {
+    //   this.setState({
+    //     ...this.state,
+    //     error: true,
+    //   });
+    //   return false;
+    // }
   };
   componentDidMount = () => {
     document.addEventListener("DOMContentLoaded", async () => {
@@ -52,7 +81,7 @@ export class AllArticles extends Component {
       M.Pushpin.init(elems, {
         top: 80,
       });
-      await this.fetchData();
+      await this.fetchData(this.getCurrentPage(), this.state.limit);
       M.AutoInit();
       elems = document.querySelectorAll(".collapsible");
       this.state.collapsibles = M.Collapsible.init(elems, {
@@ -69,7 +98,6 @@ export class AllArticles extends Component {
       }
     }
     this.setState({
-      ...this.state,
       isExpand: !this.state.isExpand,
     });
   };
@@ -82,7 +110,6 @@ export class AllArticles extends Component {
       });
     }
     this.setState({
-      ...this.state,
       dates,
     });
   };
@@ -150,54 +177,64 @@ export class AllArticles extends Component {
         </div>
       );
     }
+
     const datesWithArticles = [];
 
     for (let key in this.state.dates) {
-      datesWithArticles.push(<h5 key={`${key} date`}>{key}</h5>);
+      datesWithArticles.push(<h5 key={`date-${key}`}>{key}</h5>);
       const articles = this.state.dates[key];
       datesWithArticles.push(this.createCards(articles, key));
     }
     return (
-      <div className="row">
-        <div className="col m12 l2 hide-on-med-and-down">
-          <div className="pushpin no-autoinit">
-            <blockquote>
-              <a
-                className="waves-red waves-effect btn-flat"
-                onClick={this.expandAll}
-              >
-                Toggle Expansion
-              </a>
-            </blockquote>
+      <>
+        <div className="row">
+          <div className="col m12 l2 hide-on-med-and-down">
+            <div className="pushpin no-autoinit">
+              <blockquote>
+                <a
+                  className="waves-red waves-effect btn-flat"
+                  onClick={this.expandAll}
+                >
+                  Toggle Expansion
+                </a>
+              </blockquote>
 
-            <blockquote>
-              <a
-                className="waves-red waves-effect btn-flat"
-                onClick={() => this.showPartialArticles("Fox News")}
-              >
-                Show fox news only
-              </a>
-            </blockquote>
-            <blockquote>
-              <a
-                className="waves-red waves-effect btn-flat"
-                onClick={() => this.showPartialArticles("CNN")}
-              >
-                Show CNN only
-              </a>
-            </blockquote>
-            <blockquote>
-              <a
-                className="waves-red waves-effect btn-flat"
-                onClick={() => this.showPartialArticles("all")}
-              >
-                Show All News
-              </a>
-            </blockquote>
+              <blockquote>
+                <a
+                  className="waves-red waves-effect btn-flat"
+                  onClick={() => this.showPartialArticles("Fox News")}
+                >
+                  Show fox news only
+                </a>
+              </blockquote>
+              <blockquote>
+                <a
+                  className="waves-red waves-effect btn-flat"
+                  onClick={() => this.showPartialArticles("CNN")}
+                >
+                  Show CNN only
+                </a>
+              </blockquote>
+              <blockquote>
+                <a
+                  className="waves-red waves-effect btn-flat"
+                  onClick={() => this.showPartialArticles("all")}
+                >
+                  Show All News
+                </a>
+              </blockquote>
+            </div>
+          </div>
+          <div className="col m12 l8">
+            {datesWithArticles}
+            <Pagination
+              page={this.getCurrentPage()}
+              limit={this.state.limit}
+              onClick={this.fetchData}
+            />
           </div>
         </div>
-        <div className="col m12 l8">{datesWithArticles}</div>
-      </div>
+      </>
     );
   }
 }

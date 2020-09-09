@@ -4,14 +4,11 @@ import "./Navbar.css";
 import FNN_logo from "../assets/FNN.png";
 
 export class Navbar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: "",
-      showSearch: false,
-    };
-    this.searchInput = React.createRef();
-  }
+  state = {
+    searchText: "",
+    showSearch: false,
+  };
+  searchInput = React.createRef();
   componentDidMount() {
     M.AutoInit();
   }
@@ -53,7 +50,7 @@ export class Navbar extends Component {
             <a href="/articles/date">View by date</a>
           </li>
           <li>
-            <a href="/articles/all">View all articles</a>
+            <a href="/articles/all">View by list</a>
           </li>
         </ul>
         <nav className="blue lighten-2">

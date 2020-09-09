@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 import M from "materialize-css";
+import FNN_logo from "../assets/FNN.png";
+import "./Home.css";
 export class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: [],
-    };
-  }
+  state = {
+    articles: [],
+  };
   componentDidMount = () => {
     try {
       document.addEventListener("DOMContentLoaded", async () => {
@@ -26,10 +25,9 @@ export class Home extends Component {
     const titleColor = article.source === "Fox News" ? "blue-text" : "red-text";
     return (
       <div
-        style={{ width: 300 }}
+        style={{ width: "20rem" }}
         key={article._id}
         className="carousel-item"
-        href="#"
       >
         <div className="card">
           <div className="card-image">
@@ -49,19 +47,41 @@ export class Home extends Component {
     });
     return (
       <div className="container">
+        <div className="row">
+          <div className="center-align">
+            <div style={{ height: "5rem" }}></div>
+            <img className="home-logo" src={FNN_logo} alt="logo" />
+            <div style={{ height: "2.5rem" }}></div>
+            <h5 className="header light">
+              An one place stop to compare headlines between{" "}
+              <span className="blue-text">Fox News</span> and{" "}
+              <span className="red-text">CNN</span>
+            </h5>
+          </div>
+        </div>
         <div className="carousel no-autoinit">{articles}</div>
         <div className="row">
-          <div className="col s6 center">
-            <a href="/articles/date" className="btn center yellow darken-2">
+          <div className="col s12 m2"></div>
+          <div className="col s6 m4 center">
+            <a
+              href="/articles/date"
+              style={{ height: "100%" }}
+              className="btn center yellow darken-2"
+            >
               Read today's headlines
             </a>
           </div>
 
-          <div className="col s6 center">
-            <a href="/about" className="btn center yellow darken-2">
+          <div className="col s6 m4 center">
+            <a
+              href="/about"
+              style={{ height: "100%" }}
+              className="btn center yellow darken-2"
+            >
               About this project
             </a>
           </div>
+          <div style={{ height: "5rem" }}></div>
         </div>
       </div>
     );
