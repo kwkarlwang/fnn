@@ -45,6 +45,7 @@ export class Home extends Component {
     const articles = this.state.articles.map((article) => {
       return this.createCard(article);
     });
+
     return (
       <div className="container">
         <div className="row">
@@ -61,6 +62,7 @@ export class Home extends Component {
         </div>
         <div className="carousel no-autoinit">{articles}</div>
         <div className="row">
+          <div style={{ height: "3.5rem" }}></div>
           <div className="col s12 m2"></div>
           <div className="col s6 m4 center">
             <a
