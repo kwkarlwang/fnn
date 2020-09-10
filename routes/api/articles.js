@@ -103,5 +103,4 @@ router.get("/date", (req, res) => {
     .then((articles) => res.json(articles));
 });
 fetchArticlesPeriodically();
-// fetchArticles();
 module.exports = router;
