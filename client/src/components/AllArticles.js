@@ -48,53 +48,27 @@ export class AllArticles extends Component {
         error: true,
       });
     }
-    // try {
-    //   const dates = {};
-    //   const res = await axios.get("/api/articles");
-    // for (const article of res.data) {
-    //   article.publishedAt = new Date(article.publishedAt);
-    //   article.visible = true;
-    //   let key = article.publishedAt.toLocaleDateString();
-    //   if (key in dates) {
-    //     dates[key].push(article);
-    //   } else {
-    //     dates[key] = [article];
-    //   }
-    // }
-    //   this.setState({
-    //     ...this.state,
-    //     dates,
-    //     datesCopy: dates,
-    //   });
-    //   return true;
-    // } catch {
-    //   this.setState({
-    //     ...this.state,
-    //     error: true,
-    //   });
-    //   return false;
-    // }
   };
   componentDidMount = () => {
-    document.addEventListener("DOMContentLoaded", async () => {
-      let elems = document.querySelectorAll(".pushpin");
-      M.Pushpin.init(elems, {
-        top: 80,
-      });
+    (async () => {
       await this.fetchData(this.getCurrentPage(), this.state.limit);
-      M.AutoInit();
-      elems = document.querySelectorAll(".collapsible");
-      this.state.collapsibles = M.Collapsible.init(elems, {
-        accordion: false,
-      });
-    });
+      this.expandAll();
+    })();
   };
   expandAll = () => {
-    for (const collapsible of this.state.collapsibles) {
+    M.AutoInit();
+    let elems = document.querySelectorAll(".collapsible");
+    console.log(elems);
+    const instances = M.Collapsible.init(elems, {
+      accordion: false,
+    });
+    for (const collapsible of instances) {
       const size = collapsible.$headers.length;
+      collapsible.open();
       for (let i = 0; i < size; i++) {
-        if (!this.state.isExpand) collapsible.open(i);
-        else collapsible.close(i);
+        // if (!this.state.isExpand) collapsible.open(i);
+        // else collapsible.close(i);
+        collapsible.open(i);
       }
     }
     this.setState({
@@ -125,7 +99,7 @@ export class AllArticles extends Component {
           };
           return (
             <li key={article._id}>
-              <div className="collapsible-header">
+              <div className="collapsible-header valign-wrapper">
                 <div className="logo-image valign-wrapper">
                   <img
                     src={logo}
@@ -135,7 +109,10 @@ export class AllArticles extends Component {
                 </div>
                 <span className="valign-wrapper">{article.title}</span>
                 <span
-                  style={{ fontStyle: "italic" }}
+                  style={{
+                    fontStyle: "italic",
+                    minWidth: "5.5rem",
+                  }}
                   className="badge valign-wrapper"
                 >
                   {article.publishedAt.toLocaleString([], options)}
@@ -187,50 +164,19 @@ export class AllArticles extends Component {
     }
     return (
       <>
-        <div className="row">
-          <div className="col m12 l2 hide-on-med-and-down">
-            <div className="pushpin no-autoinit">
-              <blockquote>
-                <a
-                  className="waves-red waves-effect btn-flat"
-                  onClick={this.expandAll}
-                >
-                  Toggle Expansion
-                </a>
-              </blockquote>
-
-              <blockquote>
-                <a
-                  className="waves-red waves-effect btn-flat"
-                  onClick={() => this.showPartialArticles("Fox News")}
-                >
-                  Show fox news only
-                </a>
-              </blockquote>
-              <blockquote>
-                <a
-                  className="waves-red waves-effect btn-flat"
-                  onClick={() => this.showPartialArticles("CNN")}
-                >
-                  Show CNN only
-                </a>
-              </blockquote>
-              <blockquote>
-                <a
-                  className="waves-red waves-effect btn-flat"
-                  onClick={() => this.showPartialArticles("all")}
-                >
-                  Show All News
-                </a>
-              </blockquote>
-            </div>
-          </div>
+        <div className="row" style={{ margin: "1rem" }}>
+          <div className="col m0 l2"></div>
           <div className="col m12 l8">
             {datesWithArticles}
             <Pagination
               page={this.getCurrentPage()}
               limit={this.state.limit}
-              onClick={this.fetchData}
+              onClick={async (page, limit) => {
+                if (page === this.getCurrentPage()) return;
+                await this.fetchData(page, limit);
+                this.expandAll();
+                window.scrollTo(0, 0);
+              }}
             />
           </div>
         </div>

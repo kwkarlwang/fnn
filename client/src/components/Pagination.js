@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "./Pagination.css";
 export class Pagination extends Component {
   state = {
     numberOfPages: 10,
   };
   componentDidMount() {
-    this.fetchCount();
+    (async () => {
+      await this.fetchCount();
+    })();
   }
   fetchCount = async () => {
     const count = (await axios.get("/api/articles/count")).data;
@@ -32,8 +35,6 @@ export class Pagination extends Component {
     leftIndex = Math.max(leftIndex, 1);
     rightIndex = Math.min(rightIndex, numberOfPages);
     const tags = [];
-    const prevClass = page === 1 ? "disabled" : "waves-effect";
-    const nextClass = page >= numberOfPages ? "disabled" : "waves-effect";
     for (let i = leftIndex; i <= rightIndex; i++) {
       tags.push(
         <li
@@ -46,12 +47,15 @@ export class Pagination extends Component {
               search: `?page=${i}`,
             }}
             onClick={() => this.props.onClick(i, this.props.limit)}
+            className="page-number"
           >
             {i}
           </Link>
         </li>
       );
     }
+    const prevClass = page === 1 ? "disabled" : "waves-effect";
+    const nextClass = page >= numberOfPages ? "disabled" : "waves-effect";
     const prevPage = Math.max(page - 1, 1);
     const nextPage = Math.min(page + 1, numberOfPages);
     return (
@@ -60,9 +64,22 @@ export class Pagination extends Component {
           <Link
             to={{
               pathname: "/articles/all",
+              search: `?page=${1}`,
+            }}
+            onClick={() => this.props.onClick(1, this.props.limit)}
+            className="page-icons"
+          >
+            <i className="material-icons">first_page</i>
+          </Link>
+        </li>
+        <li className={prevClass}>
+          <Link
+            to={{
+              pathname: "/articles/all",
               search: `?page=${prevPage}`,
             }}
             onClick={() => this.props.onClick(prevPage, this.props.limit)}
+            className="page-icons"
           >
             <i className="material-icons">chevron_left</i>
           </Link>
@@ -75,8 +92,21 @@ export class Pagination extends Component {
               search: `?page=${nextPage}`,
             }}
             onClick={() => this.props.onClick(nextPage, this.props.limit)}
+            className="page-icons"
           >
             <i className="material-icons">chevron_right</i>
+          </Link>
+        </li>
+        <li className={nextClass}>
+          <Link
+            to={{
+              pathname: "/articles/all",
+              search: `?page=${numberOfPages}`,
+            }}
+            onClick={() => this.props.onClick(numberOfPages, this.props.limit)}
+            className="page-icons"
+          >
+            <i className="material-icons">last_page</i>
           </Link>
         </li>
       </>
@@ -86,7 +116,7 @@ export class Pagination extends Component {
   render() {
     return (
       <>
-        <div className="col s12 center-align">
+        <div className="center-align">
           <ul className="pagination">{this.createPageTags()}</ul>
         </div>
       </>

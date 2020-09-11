@@ -75,7 +75,7 @@ export class Home extends Component {
               style={{ height: "100%" }}
               className="btn center yellow darken-2"
             >
-              Read today's headlines
+              Read today's News
             </a>
           </div>
 

@@ -102,5 +102,7 @@ router.get("/date", (req, res) => {
     .sort({ publishedAt: -1 })
     .then((articles) => res.json(articles));
 });
-fetchArticlesPeriodically();
+if (process.env === "production") {
+  fetchArticlesPeriodically();
+}
 module.exports = router;

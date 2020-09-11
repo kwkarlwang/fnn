@@ -78,26 +78,26 @@ export class Navbar extends Component {
               <li>
                 <a href="/about">About</a>
               </li>
-              <li>
+              {/* <li>
                 <a onClick={this.toggleSearch}>Search</a>
-              </li>
+              </li> */}
             </ul>
             {/* for mobile */}
             <ul id="nav-mobile" className="sidenav">
               <li>
-                <a href="/articles/all">All News</a>
+                <a href="/articles/date">News by date</a>
               </li>
               <li>
-                <a href="/articles/date">News by date</a>
+                <a href="/articles/all">News by list</a>
               </li>
               <li>
                 <a href="/about">About</a>
               </li>
-              <li>
+              {/* <li>
                 <a className="sidenav-close" onClick={this.toggleSearch}>
                   Search
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </nav>
