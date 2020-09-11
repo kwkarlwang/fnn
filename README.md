@@ -1,6 +1,6 @@
 # FNN News
 ## Overview
-FNN is a News site that collect and compare the top headlines from Fox News and CNN. It fetches the current headlines of Fox News and CNN every single hour.<br/>
+FNN is a News site that collects and compares the top headlines from Fox News and CNN. It fetches the current headlines of Fox News and CNN every single hour.<br/>
 <br/>
 Check out a deploy version <a href="https://fnn-news.herokuapp.com">here</a>
 

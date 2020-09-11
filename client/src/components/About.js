@@ -7,7 +7,7 @@ function About() {
       <div className="section">
         <h5>What is FNN?</h5>
         <p>
-          FNN is a News site that collect and compare the top headlines from Fox
+          FNN is a News site that collects and compares the top headlines from Fox
           News and CNN. It is a full stack software engineering project
           developed using MongoDB, Express, React, and Node.js. You can find the
           source code <a href="https://github.com/kwkarlwang/fnn">here</a>
